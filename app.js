@@ -31,8 +31,19 @@ function handleFormSubmit(event) {
   const description = descriptionInput.value.trim();
   const status = statusSelect.value;
 
+  // Validación del título
   if (!title) {
     alert("El título es obligatorio.");
+    return;
+  }
+
+  if (title.length < 3) {
+    alert("El título debe tener al menos 3 caracteres.");
+    return;
+  }
+
+  if (title.length > 40) {
+    alert("El título no puede tener más de 40 caracteres.");
     return;
   }
 
