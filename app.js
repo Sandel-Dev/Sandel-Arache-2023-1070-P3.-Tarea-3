@@ -93,7 +93,21 @@ function renderTasks() {
     descriptionCell.textContent = task.description;
 
     const statusCell = document.createElement("td");
-    statusCell.textContent = task.status;
+    const statusBadge = document.createElement("span");
+    statusBadge.classList.add("status-badge");
+
+  if (task.status === "completada") {
+    statusBadge.classList.add("status-completada");
+    statusBadge.textContent = "Completada";
+  } else {
+  statusBadge.classList.add("status-pendiente");
+  statusBadge.textContent = "Pendiente";
+}
+
+statusCell.appendChild(statusBadge);
+
+statusCell.appendChild(statusBadge);
+
 
     const actionsCell = document.createElement("td");
 
