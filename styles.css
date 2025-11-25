@@ -88,3 +88,34 @@ th {
   background-color: #f44336;
   color: white;
 }
+
+/* Etiquetas (badges) de estado */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.status-pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.status-completada {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.export-btn {
+  background-color: #007bff;
+  color: white;
+  margin-top: 10px;
+}
+
+.export-btn:hover {
+  background-color: #0056b3;
+}
