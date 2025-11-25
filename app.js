@@ -60,7 +60,7 @@ function handleFormSubmit(event) {
       title,
       description,
       status,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
     tasks.push(newTask);
   }
@@ -96,18 +96,15 @@ function renderTasks() {
     const statusBadge = document.createElement("span");
     statusBadge.classList.add("status-badge");
 
-  if (task.status === "completada") {
-    statusBadge.classList.add("status-completada");
-    statusBadge.textContent = "Completada";
-  } else {
-  statusBadge.classList.add("status-pendiente");
-  statusBadge.textContent = "Pendiente";
-}
+    if (task.status === "completada") {
+      statusBadge.classList.add("status-completada");
+      statusBadge.textContent = "Completada";
+    } else {
+      statusBadge.classList.add("status-pendiente");
+      statusBadge.textContent = "Pendiente";
+    }
 
-statusCell.appendChild(statusBadge);
-
-statusCell.appendChild(statusBadge);
-
+    statusCell.appendChild(statusBadge);
 
     const actionsCell = document.createElement("td");
 
@@ -162,6 +159,20 @@ function deleteTask(id) {
   renderTasks();
 }
 
+// Nueva función: exportar tareas a JSON descargable
+function exportTasksAsJSON() {
+  const dataStr = JSON.stringify(tasks, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "tareas.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
 cancelEditBtn.addEventListener("click", () => {
   resetForm();
 });
@@ -170,6 +181,11 @@ function init() {
   loadTasksFromStorage();
   renderTasks();
   taskForm.addEventListener("submit", handleFormSubmit);
+
+  const exportBtn = document.getElementById("export-btn");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", exportTasksAsJSON);
+  }
 }
 
 init();
