@@ -100,7 +100,6 @@ th {
   color: white;
 }
 
-/* Etiquetas (badges) de estado */
 .status-badge {
   display: inline-block;
   padding: 4px 10px;
@@ -129,4 +128,24 @@ th {
 
 .export-btn:hover {
   background-color: #0056b3;
+}
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.filter-bar select {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.filter-info {
+  margin-left: auto;
+  font-style: italic;
+  color: #555;
 }

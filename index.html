@@ -42,7 +42,6 @@
         Cancelar edición
       </button>
 
-      <!-- Nuevo botón para exportar tareas a JSON -->
       <button
         type="button"
         id="export-btn"
@@ -51,10 +50,20 @@
         Exportar tareas (JSON)
       </button>
     </form>
-  </section>
 
-  <section class="list-section">
+      <section class="list-section">
     <h2>Listado de tareas</h2>
+
+    <div class="filter-bar">
+      <label for="status-filter">Mostrar:</label>
+      <select id="status-filter">
+        <option value="todas">Todas</option>
+        <option value="pendiente">Solo pendientes</option>
+        <option value="completada">Solo completadas</option>
+      </select>
+      <span id="filter-info" class="filter-info"></span>
+    </div>
+
     <table>
       <thead>
         <tr>

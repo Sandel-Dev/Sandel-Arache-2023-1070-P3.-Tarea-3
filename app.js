@@ -7,6 +7,8 @@ const descriptionInput = document.getElementById("description");
 const statusSelect = document.getElementById("status");
 const taskTableBody = document.getElementById("task-table-body");
 const cancelEditBtn = document.getElementById("cancel-edit-btn");
+const statusFilterSelect = document.getElementById("status-filter");
+const filterInfo = document.getElementById("filter-info");
 
 let tasks = [];
 
@@ -31,7 +33,6 @@ function handleFormSubmit(event) {
   const description = descriptionInput.value.trim();
   const status = statusSelect.value;
 
-  // Validación del título
   if (!title) {
     alert("El título es obligatorio.");
     return;
@@ -73,61 +74,87 @@ function handleFormSubmit(event) {
 function renderTasks() {
   taskTableBody.innerHTML = "";
 
-  if (tasks.length === 0) {
+  const filter = statusFilterSelect ? statusFilterSelect.value : "todas";
+  let filteredTasks = tasks;
+
+  if (filter === "pendiente" || filter === "completada") {
+    filteredTasks = tasks.filter((task) => task.status === filter);
+  }
+
+  if (filteredTasks.length === 0) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
     cell.colSpan = 4;
-    cell.textContent = "No hay tareas registradas.";
-    row.appendChild(cell);
-    taskTableBody.appendChild(row);
-    return;
-  }
 
-  tasks.forEach((task) => {
-    const row = document.createElement("tr");
-
-    const titleCell = document.createElement("td");
-    titleCell.textContent = task.title;
-
-    const descriptionCell = document.createElement("td");
-    descriptionCell.textContent = task.description;
-
-    const statusCell = document.createElement("td");
-    const statusBadge = document.createElement("span");
-    statusBadge.classList.add("status-badge");
-
-    if (task.status === "completada") {
-      statusBadge.classList.add("status-completada");
-      statusBadge.textContent = "Completada";
+    if (tasks.length === 0) {
+      cell.textContent = "No hay tareas registradas.";
     } else {
-      statusBadge.classList.add("status-pendiente");
-      statusBadge.textContent = "Pendiente";
+      if (filter === "pendiente") {
+        cell.textContent = "No hay tareas con estado pendiente.";
+      } else if (filter === "completada") {
+        cell.textContent = "No hay tareas con estado completada.";
+      } else {
+        cell.textContent = "No hay tareas para mostrar.";
+      }
     }
 
-    statusCell.appendChild(statusBadge);
-
-    const actionsCell = document.createElement("td");
-
-    const editButton = document.createElement("button");
-    editButton.textContent = "Editar";
-    editButton.classList.add("action-btn", "edit-btn");
-    editButton.addEventListener("click", () => loadTaskIntoForm(task.id));
-
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Eliminar";
-    deleteButton.classList.add("action-btn", "delete-btn");
-    deleteButton.addEventListener("click", () => deleteTask(task.id));
-
-    actionsCell.appendChild(editButton);
-    actionsCell.appendChild(deleteButton);
-
-    row.appendChild(titleCell);
-    row.appendChild(descriptionCell);
-    row.appendChild(statusCell);
-    row.appendChild(actionsCell);
-
+    row.appendChild(cell);
     taskTableBody.appendChild(row);
-  });
+  } else {
+    filteredTasks.forEach((task) => {
+      const row = document.createElement("tr");
+
+      const titleCell = document.createElement("td");
+      titleCell.textContent = task.title;
+
+      const descriptionCell = document.createElement("td");
+      descriptionCell.textContent = task.description;
+
+      const statusCell = document.createElement("td");
+      const statusBadge = document.createElement("span");
+      statusBadge.classList.add("status-badge");
+
+      if (task.status === "completada") {
+        statusBadge.classList.add("status-completada");
+        statusBadge.textContent = "Completada";
+      } else {
+        statusBadge.classList.add("status-pendiente");
+        statusBadge.textContent = "Pendiente";
+      }
+
+      statusCell.appendChild(statusBadge);
+
+      const actionsCell = document.createElement("td");
+
+      const editButton = document.createElement("button");
+      editButton.textContent = "Editar";
+      editButton.classList.add("action-btn", "edit-btn");
+      editButton.addEventListener("click", () => loadTaskIntoForm(task.id));
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Eliminar";
+      deleteButton.classList.add("action-btn", "delete-btn");
+      deleteButton.addEventListener("click", () => deleteTask(task.id));
+
+      actionsCell.appendChild(editButton);
+      actionsCell.appendChild(deleteButton);
+
+      row.appendChild(titleCell);
+      row.appendChild(descriptionCell);
+      row.appendChild(statusCell);
+      row.appendChild(actionsCell);
+
+      taskTableBody.appendChild(row);
+    });
+  }
+
+  if (filterInfo) {
+    let etiquetaFiltro = "todas las tareas";
+    if (filter === "pendiente") etiquetaFiltro = "tareas pendientes";
+    if (filter === "completada") etiquetaFiltro = "tareas completadas";
+
+    filterInfo.textContent = `Mostrando ${filteredTasks.length} ${etiquetaFiltro}.`;
+  }
 }
 
 function loadTaskIntoForm(id) {
@@ -159,7 +186,6 @@ function deleteTask(id) {
   renderTasks();
 }
 
-// Nueva función: exportar tareas a JSON descargable
 function exportTasksAsJSON() {
   const dataStr = JSON.stringify(tasks, null, 2);
   const blob = new Blob([dataStr], { type: "application/json" });
@@ -185,6 +211,10 @@ function init() {
   const exportBtn = document.getElementById("export-btn");
   if (exportBtn) {
     exportBtn.addEventListener("click", exportTasksAsJSON);
+  }
+
+  if (statusFilterSelect) {
+    statusFilterSelect.addEventListener("change", renderTasks);
   }
 }
 
