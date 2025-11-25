@@ -33,6 +33,7 @@ function handleFormSubmit(event) {
   const description = descriptionInput.value.trim();
   const status = statusSelect.value;
 
+  // Validación del título
   if (!title) {
     alert("El título es obligatorio.");
     return;
@@ -87,7 +88,9 @@ function renderTasks() {
     cell.colSpan = 4;
 
     if (tasks.length === 0) {
-      cell.textContent = "No hay tareas registradas.";
+      // 🔹 Hotfix: mensaje mejorado cuando no hay tareas
+      cell.textContent =
+        "No hay tareas registradas. Usa el formulario de arriba para agregar una nueva tarea.";
     } else {
       if (filter === "pendiente") {
         cell.textContent = "No hay tareas con estado pendiente.";
